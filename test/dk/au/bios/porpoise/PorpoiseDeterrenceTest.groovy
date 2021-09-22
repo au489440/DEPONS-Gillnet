@@ -103,7 +103,7 @@ class PorpoiseDeterrenceTest extends Specification {
 		expect: "initial checks"
 		p.getDeterStrength() == 0.0;
 
-		when: "deter porpoise"; p.deter(64, turb);
+		when: "deter porpoise"; p.deter(64, turb.position);
 		then: p.getDeterStrength() == 64;
 
 		[32.0, 16.0, 8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125].each {
@@ -128,7 +128,7 @@ class PorpoiseDeterrenceTest extends Specification {
 		expect: "initial checks"
 		p.getDeterStrength() == 0.0;
 
-		when: "deter porpoise"; p.deter(64, turb);
+		when: "deter porpoise"; p.deter(64, turb.position);
 		then: p.getDeterStrength() == 64;
 
 		[48.0, 36.0, 27.0, 20.25, 15.1875, 11.390625, 8.54296875, 6.4072265625].each {
@@ -153,7 +153,7 @@ class PorpoiseDeterrenceTest extends Specification {
 		expect: "initial checks"
 		p.getDeterStrength() == 0.0;
 
-		when: "deter porpoise"; p.deter(64, turb);
+		when: "deter porpoise"; p.deter(64, turb.position);
 		then: p.getDeterStrength() == 64;
 
 		[32.0, 16.0, 8.0, 4.0, 2.0, 0.0].each {
@@ -164,7 +164,7 @@ class PorpoiseDeterrenceTest extends Specification {
 		// Deter time = 2
 		when:
 		SimulationParameters.deterTime = 2;
-		p.deter(64, turb);
+		p.deter(64, turb.position);
 
 		then: p.getDeterStrength() == 64;
 
@@ -176,7 +176,7 @@ class PorpoiseDeterrenceTest extends Specification {
 		// Deter time = 7
 		when:
 		SimulationParameters.deterTime = 7;
-		p.deter(64, turb);
+		p.deter(64, turb.position);
 
 		then: p.getDeterStrength() == 64;
 
