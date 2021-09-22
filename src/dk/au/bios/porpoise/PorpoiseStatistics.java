@@ -51,6 +51,7 @@ public class PorpoiseStatistics extends Agent {
 
 		switch (cause) {
 		case ByCatch:
+		case ByCatchGillnet:
 			numDeathsByByCatch++;
 			break;
 		case OldAge:

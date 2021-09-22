@@ -49,6 +49,7 @@ import dk.au.bios.porpoise.tasks.FoodTask;
 import dk.au.bios.porpoise.tasks.MonthlyTasks;
 import dk.au.bios.porpoise.tasks.YearlyTask;
 import dk.au.bios.porpoise.util.DebugLog;
+import dk.au.bios.porpoise.util.PorpoiseLifecycleLog;
 import dk.au.bios.porpoise.util.test.PorpoiseTestDataCapturer;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
@@ -98,6 +99,8 @@ public class PorpoiseSimBuilder implements ContextBuilder<Agent> {
 		} 
 
 		PorpoiseTestDataCapturer.capture(params);
+
+		PorpoiseLifecycleLog.init();
 
 		// Currently disabled - PSMVerificationLog.setup();
 		// Disabled, enable to capture replay output
@@ -162,6 +165,7 @@ public class PorpoiseSimBuilder implements ContextBuilder<Agent> {
 		}
 
 		addTurbines(context, space, grid);
+		addGillnets(context, space, grid);
 
 		for (final Agent a : context) {
 			final NdPoint pt = space.getLocation(a);
@@ -263,6 +267,17 @@ public class PorpoiseSimBuilder implements ContextBuilder<Agent> {
 			try {
 				Turbine.load(context, space, grid, turbines, RunEnvironment.getInstance().isBatch());
 			} catch (final Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	private void addGillnets(final Context<Agent> context, final ContinuousSpace<Agent> space, final Grid<Agent> grid) {
+		String gillnets = SimulationParameters.getGillnets();
+		if (gillnets != null && !"off".equalsIgnoreCase(gillnets)) {
+			try {
+				Gillnet.load(context, space, grid, gillnets);
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}

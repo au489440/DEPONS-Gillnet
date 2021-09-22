@@ -27,12 +27,13 @@
 
 package dk.au.bios.porpoise.tasks;
 
-import repast.simphony.context.Context;
-import repast.simphony.engine.schedule.IAction;
 import dk.au.bios.porpoise.Agent;
+import dk.au.bios.porpoise.Gillnet;
 import dk.au.bios.porpoise.Porpoise;
 import dk.au.bios.porpoise.SoundSource;
 import dk.au.bios.porpoise.Turbine;
+import repast.simphony.context.Context;
+import repast.simphony.engine.schedule.IAction;
 
 /**
  * The scheduled action calling the deterrence functionality.
@@ -51,6 +52,7 @@ public class DeterenceTask implements IAction {
 			((Porpoise) a).updateDeterence();
 		}
 
+		Gillnet.lifecycle(context);
 		Turbine.activateTurbines(context);
 
 		for (final Agent a : this.context.getObjects(Turbine.class)) {
@@ -58,6 +60,9 @@ public class DeterenceTask implements IAction {
 		}
 		for (final Agent a : this.context.getObjects(SoundSource.class)) {
 			((SoundSource) a).deterPorpoise();
+		}
+		for (final Agent a : this.context.getObjects(Gillnet.class)) {
+			((Gillnet) a).deterPorpoise();
 		}
 
 		Turbine.deactiveTurbines(context);

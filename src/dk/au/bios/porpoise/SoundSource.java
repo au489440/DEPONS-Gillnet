@@ -90,7 +90,7 @@ public class SoundSource extends Agent {
 							- SimulationParameters.getDeterResponseThreshold();
 
 					if (currentDeterence > 0) {
-						p.deter(currentDeterence, this);
+						p.deter(currentDeterence, this.getPosition());
 					}
 
 					if (DebugLog.isEnabledFor(8)) {

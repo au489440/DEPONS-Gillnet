@@ -41,6 +41,7 @@ import dk.au.bios.porpoise.tasks.YearlyTask;
 import dk.au.bios.porpoise.util.CircularBuffer;
 import dk.au.bios.porpoise.util.DebugLog;
 import dk.au.bios.porpoise.util.PSMVerificationLog;
+import dk.au.bios.porpoise.util.PorpoiseLifecycleLog;
 import dk.au.bios.porpoise.util.ReplayHelper;
 import dk.au.bios.porpoise.util.SimulationTime;
 import dk.au.bios.porpoise.util.test.PorpoiseTestDataCapturer;
@@ -1022,13 +1023,14 @@ public class Porpoise extends Agent {
 		return Math.cos(getHeadingInRads());
 	}
 
-	private void die(final CauseOfDeath cause) {
+	public void die(final CauseOfDeath cause) {
 		// System.out.println("Porpoise " + id + " died of : " + cause);
+		PorpoiseLifecycleLog.writeDeath(this, cause);
 		this.alive = false;
 		context.remove(this);
 		Globals.getMonthlyStats().addDeath(cause);
 		YearlyTask.recordDeath((int) Math.floor(this.getAge()));
-		
+
 		DeadPorpoiseReportProxy reportProxy = new DeadPorpoiseReportProxy(this.getSpace(), this.getGrid(), this);
 		context.add(reportProxy);
 	}
@@ -1225,35 +1227,15 @@ public class Porpoise extends Agent {
 		this.matingDay = (int) Math.round(ran);
 	}
 
-	public synchronized void deter(final double currentDeterenceStrength, final SoundSource s) {
-		final NdPoint shipPosition = s.getPosition();
+	public void deter(final double currentDeterenceStrength, final NdPoint srcPosition) {
 		final NdPoint porpPosition = getPosition();
 
 		// become deterred if not already more scared of other sound source
 		if (this.deterStrength < currentDeterenceStrength) {
 			this.deterStrength = currentDeterenceStrength;
-			// vector pointing away from turbine
-			this.deterVt[0] = currentDeterenceStrength * ((porpPosition.getX() - shipPosition.getX()));
-			this.deterVt[1] = currentDeterenceStrength * ((porpPosition.getY() - shipPosition.getY()));
-
-			this.deterTimeLeft = SimulationParameters.getDeterTime(); // how long to remain affected
-		}
-
-		// Porpoises nearby stop dispersing (which could force them to cross over disturbing agents very fast)
-		dispersalBehaviour.deactivate();
-	}
-
-	public synchronized void deter(final double currentDeterenceStrength, final Turbine t) {
-		// Deterrence by wind farms
-		final NdPoint turbPosition = t.getPosition();
-		final NdPoint porpPosition = getPosition();
-
-		// become deterred if not already more scared of other wind turbine
-		if (this.deterStrength < currentDeterenceStrength) {
-			this.deterStrength = currentDeterenceStrength;
-			// vector pointing away from turbine
-			this.deterVt[0] = currentDeterenceStrength * ((porpPosition.getX() - turbPosition.getX()));
-			this.deterVt[1] = currentDeterenceStrength * ((porpPosition.getY() - turbPosition.getY()));
+			// vector pointing away from srcPosition
+			this.deterVt[0] = currentDeterenceStrength * ((porpPosition.getX() - srcPosition.getX()));
+			this.deterVt[1] = currentDeterenceStrength * ((porpPosition.getY() - srcPosition.getY()));
 
 			this.deterTimeLeft = SimulationParameters.getDeterTime(); // how long to remain affected
 		}
@@ -1532,8 +1514,7 @@ public class Porpoise extends Agent {
 	 *
 	 * @return
 	 */
-	public int getIsInDisp1Mode()
-	{
+	public int getIsInDisp1Mode() {
 		return this.dispersalBehaviour.getDispersalType() == 1 ? 1 : 0;
 	}
 
@@ -1542,8 +1523,7 @@ public class Porpoise extends Agent {
 	 *
 	 * @return
 	 */
-	public int getIsInDisp2Mode()
-	{
+	public int getIsInDisp2Mode() {
 		return this.dispersalBehaviour.getDispersalType() == 2 ? 1 : 0;
 	}
 	

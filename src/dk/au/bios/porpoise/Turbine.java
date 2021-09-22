@@ -188,7 +188,7 @@ public class Turbine extends Agent {
 			if (t.getEndTick() < now) {
 				turbinesToRemove.add(t);
 			} else {
-				t.deterPorpoise();
+				t.deterPorpoise(); // FIXME Already called in DeterenceTask - seems we're doing this twice?
 			}
 		}
 		for (final Turbine t : turbinesToRemove) {
@@ -227,7 +227,7 @@ public class Turbine extends Agent {
 								- SimulationParameters.getDeterResponseThreshold();
 
 						if (currentDeterence > 0) {
-							p.deter(currentDeterence, this);
+							p.deter(currentDeterence, this.getPosition());
 						}
 
 						if (DebugLog.isEnabledFor(8)) {

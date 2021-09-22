@@ -28,9 +28,13 @@
 						defaultValue="0" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"/>
+		<parameter name="gillnets" displayName="Gillnets" type="string" 
+						defaultValue="off"
+						values="'off' 'Samsoe'" 
+						isReadOnly="false" />
 		<parameter name="turbines" displayName="turbines - Wind farm construction scenario to be used" type="string" 
 						defaultValue="off"
-						values="'off' 'NorthSea_scenario1' 'NorthSea_scenario2' 'NorthSea_scenario3' 'DanTysk-construction' 'Gemini-construction' 'User-def'" 
+						values="'off' 'NorthSea_scenario1' 'NorthSea_scenario2' 'NorthSea_scenario3' 'DanTysk-construction' 'Samsoe-construction' 'Gemini-construction' 'User-def'" 
 						isReadOnly="false" />
   		<parameter name="ships" displayName="Ships enabled" type="boolean" 
 						defaultValue="false" 

@@ -41,6 +41,7 @@ public final class SimulationParameters {
 
 	private static String landscape;
 	private static String turbines;
+	private static String gillnets;
 	private static boolean shipsEnabled;
 	private static int porpoiseCount;
 	private static int trackedPorpoiseCount;
@@ -209,6 +210,7 @@ public final class SimulationParameters {
 	public static void initialize(final Parameters params) {
 		landscape = params.getString("landscape");
 		turbines = params.getString("turbines");
+		gillnets = params.getString("gillnets");
 		porpoiseCount = params.getInteger("porpoiseCount");
 		trackedPorpoiseCount = params.getInteger("trackedPorpoiseCount");
 		shipsEnabled = params.getBoolean("ships");
@@ -288,6 +290,10 @@ public final class SimulationParameters {
 
 	public static String getTurbines() {
 		return turbines;
+	}
+
+	public static String getGillnets() {
+		return gillnets;
 	}
 
 	public static int getPorpoiseCount() {
